@@ -1,0 +1,260 @@
+---
+title: "Bloque3dsint"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+x = c(0,1,2,5,7,9,10)
+c = c(0,0,0,0.4,0.6,0.8,1)
+f = c(1,1,0.8,0.3,0.1,0,0)
+corf = c(1,1,0.8,0.4,0.6,0.8,1)
+candf = c(0,0,0,0.3,0.1,0,0)
+noc = c(1,1,1,0.6,0.4,0.2,0)
+nof = c(0,0,0.2,0.7,0.9,1,1)
+cminusf = c(0 ,0,0,0.4,0.6,0.8,1)
+fminusc = c(1,1,0.8,0.3,0.1,0,0)
+candnoc = c(0,0,0,0.4,0.4,0.2,0)
+
+plot(x=x,y=c,main="Congestionado y fluido",col="blue",type="l",
+     ylab="pertenencia",xlab="Universo de discurso")
+lines(x=x,y=f,col="red")
+legend("top",fill=c("blue","red"),legend = c("con","flu"))
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+library(ggplot2)
+trozos <- function(x,y,o) {
+  f <- exp((-(x-y)^2)/(2*o^2))
+  return(f)
+}
+rotura.plot <- ggplot(diferencia, aes(V1, fx.inter)) +
+  stat_function(fun = function(x){trozos(x, 8, 2)}, aes(colour = "8kHz"), size=0.5, geom = "area", fill="red", alpha=0.4) +
+  stat_function(fun = function(x){trozos(x, 4, 2)}, aes(colour = "4kHz"), size=0.5, geom = "area", fill="skyblue4", alpha=0.4) +
+  ylim(0, 1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("8kHz"="red", "4kHz"="blue")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+```
+
+```{r}
+fx.union <- c()
+for (x in seq(0,10,0.005)) {
+fx.union <- append(fx.union, max(trozos(x, 4, 2),trozos(x, 8, 2)))
+}
+union <- as.data.frame(cbind(seq(0,10,0.005), fx.union))
+rotura.plot <- ggplot(union, aes(x=seq(0,10,0.005), fx.union)) +
+  geom_area(aes(color="Unión"),fill = "skyblue4",alpha = .4) + 
+  stat_function(fun = function(x){trozos(x, 4, 2)}, colour = "blue", size=0.1) +
+  stat_function(fun = function(x){trozos(x, 8, 2)}, colour = "red", size=0.1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("Unión"="black")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+
+```{r}
+fx.inter <- c()
+for (x in seq(0,10,0.005)) {
+fx.inter <- append(fx.inter, min(trozos(x, 4, 2),trozos(x, 8, 2)))
+}
+inter <- as.data.frame(cbind(seq(0,10,0.005), fx.inter))
+rotura.plot <- ggplot(inter, aes(V1, fx.inter)) +
+  geom_area(aes(color="Intersección"),fill = "skyblue4",alpha = .4) + 
+  stat_function(fun = function(x){trozos(x, 4, 2)}, colour = "blue", size=0.1) +
+  stat_function(fun = function(x){trozos(x, 8, 2)}, colour = "red", size=0.1) +
+  ylim(0, 1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("Intersección"="black")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+
+Complementario A
+
+```{r}
+fx.complA <- c()
+for (x in seq(0,10,0.005)) {
+fx.complA <- append(fx.complA, 1-trozos(x, 4, 2))
+}
+comple <- as.data.frame(cbind(seq(0,10,0.005), fx.complA))
+rotura.plot <- ggplot(comple, aes(V1, fx.complA)) +
+  geom_area(aes(color="Complementario A"),fill = "skyblue4",alpha = .4) + 
+  stat_function(fun = function(x){trozos(x, 4, 2)}, colour = "blue", size=0.1) +
+  ylim(0, 1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("Complementario A"="black")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+
+Complementario B
+
+```{r}
+fx.complB <- c()
+for (x in seq(0,10,0.005)) {
+fx.complB <- append(fx.complB, 1-trozos(x, 8, 2))
+}
+comple <- as.data.frame(cbind(seq(0,10,0.005), fx.complB))
+rotura.plot <- ggplot(comple, aes(V1, fx.complB)) +
+  geom_area(aes(color="Complementario B"),fill = "skyblue4",alpha = .4) + 
+  stat_function(fun = function(x){trozos(x, 8, 2)}, colour = "red", size=0.1) +
+  ylim(0, 1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("Complementario B"="black")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+
+Diferencia de conjuntos A | B
+
+```{r}
+fx.dif <- c()
+for (x in seq(0,10,0.005)) {
+fx.dif <- append(fx.dif, min(trozos(x, 4, 2),1-trozos(x, 8, 2)))
+}
+diferencia <- as.data.frame(cbind(seq(0,10,0.005), fx.dif))
+rotura.plot <- ggplot(diferencia, aes(V1, fx.dif)) +
+  geom_area(aes(color="A | B"),fill = "skyblue4",alpha = .4) + 
+  stat_function(fun = function(x){trozos(x, 8, 2)}, colour = "red", size=0.1) +
+  stat_function(fun = function(x){trozos(x, 4, 2)}, colour = "blue", size=0.1) +
+  ylim(0, 1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("A | B"="black")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+
+Diferencia de conjuntos B | A
+
+```{r}
+fx.dif <- c()
+for (x in seq(0,10,0.005)) {
+fx.dif <- append(fx.dif, min(trozos(x, 8, 2),1-trozos(x, 4, 2)))
+}
+diferencia <- as.data.frame(cbind(seq(0,10,0.005), fx.dif))
+rotura.plot <- ggplot(diferencia, aes(V1, fx.dif)) +
+  geom_area(aes(color="B | A"),fill = "skyblue4",alpha = .4) + 
+  stat_function(fun = function(x){trozos(x, 8, 2)}, colour = "red", size=0.1) +
+  stat_function(fun = function(x){trozos(x, 4, 2)}, colour = "blue", size=0.1) +
+  ylim(0, 1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("B | A"="black")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+
+Leyes de morgan Unión inversa
+
+```{r}
+fx.inter <- c()
+for (x in seq(0,10,0.005)) {
+fx.inter <- append(fx.inter, 1-max(trozos(x, 4, 2),trozos(x, 8, 2)))
+}
+diferencia <- as.data.frame(cbind(seq(0,10,0.005), fx.inter))
+rotura.plot <- ggplot(diferencia, aes(V1, fx.inter)) +
+  geom_area(aes(color="Inversa Unión"),fill = "skyblue4",alpha = .4) + 
+  stat_function(fun = function(x){trozos(x, 8, 2)}, colour = "red", size=0.1) +
+  stat_function(fun = function(x){trozos(x, 4, 2)}, colour = "blue", size=0.1) +
+  ylim(0, 1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("Inversa Unión"="black")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+
+Leyes de morgan Intersección de las inversas
+
+```{r}
+fx.inter <- c()
+for (x in seq(0,10,0.005)) {
+fx.inter <- append(fx.inter, min(1-trozos(x, 4, 2),1-trozos(x, 8, 2)))
+}
+diferencia <- as.data.frame(cbind(seq(0,10,0.005), fx.inter))
+rotura.plot <- ggplot(diferencia, aes(V1, fx.inter)) +
+  geom_area(aes(color="Inter Inversas"),fill = "skyblue4",alpha = .4) + 
+  stat_function(fun = function(x){trozos(x, 8, 2)}, colour = "red", size=0.1) +
+  stat_function(fun = function(x){trozos(x, 4, 2)}, colour = "blue", size=0.1) +
+  ylim(0, 1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("Inter Inversas"="black")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+
+
+Leyes de morgan Inversa de intersección
+
+```{r}
+fx.inter <- c()
+for (x in seq(0,10,0.005)) {
+fx.inter <- append(fx.inter, 1-min(trozos(x, 4, 2),trozos(x, 8, 2)))
+}
+inter <- as.data.frame(cbind(seq(0,10,0.005), fx.inter))
+rotura.plot <- ggplot(inter, aes(V1, fx.inter)) +
+  geom_area(aes(color="Inv Inter"),fill = "skyblue4",alpha = .4) + 
+  stat_function(fun = function(x){trozos(x, 4, 2)}, colour = "blue", size=0.1) +
+  stat_function(fun = function(x){trozos(x, 8, 2)}, colour = "red", size=0.1) +
+  ylim(0, 1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("Inv Inter"="black")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+
+Leyes de morgan Intersección de las inversas
+
+```{r}
+fx.inter <- c()
+for (x in seq(0,10,0.005)) {
+fx.inter <- append(fx.inter, max(1-trozos(x, 4, 2),1-trozos(x, 8, 2)))
+}
+inter <- as.data.frame(cbind(seq(0,10,0.005), fx.inter))
+rotura.plot <- ggplot(inter, aes(V1, fx.inter)) +
+  geom_area(aes(color="Inter Inv"),fill = "skyblue4",alpha = .4) + 
+  stat_function(fun = function(x){trozos(x, 4, 2)}, colour = "blue", size=0.1) +
+  stat_function(fun = function(x){trozos(x, 8, 2)}, colour = "red", size=0.1) +
+  ylim(0, 1) +
+  xlab("x") +
+  ylab("f(x)") +
+  scale_colour_manual("Leyenda", values = c("Inter Inv"="black")) +
+  theme(legend.position="right") +
+  theme_minimal()
+rotura.plot
+```
+
